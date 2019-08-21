@@ -9,6 +9,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const exphbs = require("express-handlebars");
+const flash = require("connect-flash");
 
 // initialize express
 const app = express();
@@ -48,6 +49,17 @@ app.set("view engine", "handlebars");
 //body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//connect flash
+app.use(flash());
+
+//global variables
+app.use((req, res, next) => {
+  app.locals.success_msg = req.flash("success_msg");
+  app.locals.error_msg = req.flash("error_msg");
+  app.locals.error = req.flash("error");
+  next();
+});
 
 //routes
 
