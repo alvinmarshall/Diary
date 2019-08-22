@@ -18,8 +18,11 @@ const app = express();
 app.use(express.static(path.join(__dirname, process.env.ASSET_DIR)));
 //load routes
 const userRoutes = require("./src/routes/users");
-const diaryRoutes = require("./src/routes/diary");
+// const diaryRoutes = require("./src/routes/diary");
 //middle ware
+
+//passport config
+require("./src/config/passport")(passport);
 
 //mongo db config
 const db = process.env.MONGODB_URI;
@@ -39,8 +42,9 @@ app.use(
 );
 
 // passport
-// app.use(passport.initialize);
-// app.use(passport.session());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //handlebar
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -71,7 +75,7 @@ app.get("/", (req, res) => {
 //users
 app.use("/users", userRoutes);
 //diary
-app.use("/diary", diaryRoutes);
+// app.use("/diary", diaryRoutes);
 //start app
 app.listen(port, () => {
   console.log(`Server started on ${port}`);
